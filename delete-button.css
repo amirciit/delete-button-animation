@@ -1,0 +1,91 @@
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f4f0f7;font-family:Inter,ui-rounded,system-ui,-apple-system,"Segoe UI",sans-serif}
+.demo{padding:70px}
+.bin-delete{
+ --w:166px;--h:58px;--circle:58px;--c1:#a536bd;--c2:#720c94;
+ position:relative;width:var(--w);height:var(--h);padding:0;border:0;border-radius:999px;
+ background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;cursor:pointer;overflow:visible;
+ box-shadow:0 8px 17px rgba(101,21,125,.26);
+ transition:width .43s cubic-bezier(.2,.8,.25,1),transform .18s ease;
+}
+.bin-delete:active{transform:scale(.985)}
+.bin-delete__bin{position:absolute;left:19px;top:50%;width:30px;height:32px;transform:translateY(-50%);z-index:5;
+ transition:left .43s cubic-bezier(.2,.8,.25,1),transform .43s cubic-bezier(.2,.8,.25,1)}
+.bin-delete__bin svg{width:100%;height:100%;overflow:visible}
+.bin-delete__tilt{transform-box:fill-box;transform-origin:50% 75%;transition:transform .14s ease}
+.bin-delete__lid,.bin-delete__body,.bin-delete__line{fill:none;stroke:#fff;stroke-width:2.05;stroke-linecap:round;stroke-linejoin:round}
+.bin-delete__lid{transform-box:fill-box;transform-origin:12% 90%;transition:transform .14s cubic-bezier(.2,.9,.3,1.2)}
+.bin-delete__fill{fill:#fff;transition:y .12s ease-out,height .12s ease-out}
+.bin-delete__label{position:absolute;left:59px;top:50%;transform:translateY(-50%);display:flex;white-space:nowrap;
+ font-size:18px;font-weight:750;letter-spacing:.1px;line-height:1;z-index:4}
+.bin-delete__letter{display:inline-block}
+.bin-delete__fly{position:fixed;z-index:99999;color:#fff;font-size:18px;font-weight:750;line-height:1;pointer-events:none;will-change:transform,opacity}
+.bin-delete.is-eating .bin-delete__tilt{transform:rotate(16deg) translate(1px,1px)}
+.bin-delete.is-eating .bin-delete__lid{transform:translate(-1px,-1px) rotate(-28deg)}
+.bin-delete.is-swallow .bin-delete__tilt{animation:swallow .16s cubic-bezier(.2,.8,.3,1)}
+@keyframes swallow{0%,100%{transform:rotate(16deg) translate(1px,1px)}50%{transform:rotate(23deg) translate(2px,2px) scale(.96)}}
+.bin-delete.is-circle{width:var(--circle)}
+.bin-delete.is-circle .bin-delete__bin{left:50%;transform:translate(-50%,-50%)}
+.bin-delete.is-circle .bin-delete__tilt{transform:rotate(0)}
+.bin-delete.is-circle .bin-delete__lid{transform:none}
+.bin-delete__ring{position:absolute;left:50%;top:50%;width:73px;height:73px;border-radius:50%;transform:translate(-50%,-50%) scale(.72);opacity:0;z-index:1}
+.bin-delete__ring:before,.bin-delete__ring:after{content:"";position:absolute;inset:0;border-radius:50%;border:2.5px solid rgba(126,21,151,.6);border-right-color:transparent;border-bottom-color:transparent}
+.bin-delete__ring:after{inset:6px;opacity:.55;transform:rotate(170deg)}
+.bin-delete.is-ring .bin-delete__ring{opacity:1;animation:ringIn .18s ease-out both,ringSpin .75s linear .18s}
+@keyframes ringIn{from{transform:translate(-50%,-50%) scale(.72);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+@keyframes ringSpin{to{transform:translate(-50%,-50%) scale(1) rotate(360deg)}}
+.bin-delete.is-returning .bin-delete__label{animation:returnLabel .28s .08s cubic-bezier(.2,.85,.3,1.1) both}
+@keyframes returnLabel{from{opacity:0;transform:translateY(-50%) translateX(-8px)}to{opacity:1;transform:translateY(-50%) translateX(0)}}
+@media(prefers-reduced-motion:reduce){.bin-delete,.bin-delete *{animation:none!important;transition:none!important}}
+
+/* v5 success ending ------------------------------------------------------- */
+.bin-delete__success{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  gap:8px;opacity:0;pointer-events:none;z-index:8;white-space:nowrap;
+}
+.bin-delete__check{width:27px;height:27px;overflow:visible}
+.bin-delete__check path{
+  fill:none;stroke:#fff;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:28;stroke-dashoffset:28;
+}
+.bin-delete__success-text{
+  font-size:18px;font-weight:750;line-height:1;opacity:0;transform:translateX(-5px);
+}
+.bin-delete.is-success{width:166px}
+.bin-delete.is-success .bin-delete__bin,
+.bin-delete.is-success .bin-delete__label,
+.bin-delete.is-success .bin-delete__ring{opacity:0}
+.bin-delete.is-success .bin-delete__success{opacity:1}
+.bin-delete.is-success .bin-delete__check path{
+  animation:checkDraw .38s cubic-bezier(.45,0,.2,1) .06s forwards;
+}
+.bin-delete.is-success .bin-delete__success-text{
+  animation:successText .30s cubic-bezier(.2,.85,.3,1) .25s forwards;
+}
+@keyframes checkDraw{to{stroke-dashoffset:0}}
+@keyframes successText{
+  to{opacity:1;transform:translateX(0)}
+}
+.bin-delete.is-success-out .bin-delete__success{
+  animation:successOut .25s ease-in forwards;
+}
+@keyframes successOut{
+  to{opacity:0;transform:translateX(8px) scale(.96)}
+}
+
+/* Filled bin enters from the LEFT after the success tick disappears. */
+.bin-delete.is-final-bin .bin-delete__success,
+.bin-delete.is-final-bin .bin-delete__label,
+.bin-delete.is-final-bin .bin-delete__ring{opacity:0}
+.bin-delete.is-final-bin .bin-delete__bin{
+  opacity:1;left:50%;
+  animation:filledBinFromLeft .48s cubic-bezier(.16,.9,.25,1.12) both;
+}
+.bin-delete.is-final-bin .bin-delete__tilt{transform:rotate(0)}
+.bin-delete.is-final-bin .bin-delete__lid{transform:none}
+.bin-delete.is-final-bin .bin-delete__fill{height:18px;y:12px}
+@keyframes filledBinFromLeft{
+  0%{transform:translate(calc(-50% - 82px),-50%) rotate(-8deg);opacity:0}
+  68%{transform:translate(calc(-50% + 5px),-50%) rotate(2deg);opacity:1}
+  100%{transform:translate(-50%,-50%) rotate(0);opacity:1}
+}

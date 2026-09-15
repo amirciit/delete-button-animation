@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bin Eats The Label</title>
+<link rel="stylesheet" href="delete-button.css">
+</head>
+<body>
+  <div class="demo">
+    <button class="bin-delete" type="button" data-label="Delete">
+      <span class="bin-delete__bin" aria-hidden="true">
+        <svg viewBox="0 0 32 34">
+          <defs>
+            <clipPath id="binBodyClip">
+              <path d="M9.5 12.2h13l-1.15 17H10.65z"/>
+            </clipPath>
+          </defs>
+          <g class="bin-delete__tilt">
+            <g class="bin-delete__lid">
+              <path d="M8.2 9.6h15.6"/>
+              <path d="M12.2 6.5h7.6"/>
+            </g>
+            <path class="bin-delete__body" d="M9.5 12.2h13l-1.15 17H10.65z"/>
+            <g clip-path="url(#binBodyClip)">
+              <rect class="bin-delete__fill" x="8" y="30" width="16" height="0"/>
+            </g>
+            <path class="bin-delete__line" d="M14 16v9.5M18 16v9.5"/>
+          </g>
+        </svg>
+      </span>
+      <span class="bin-delete__label">Delete</span>
+      <span class="bin-delete__success" aria-hidden="true">
+        <svg class="bin-delete__check" viewBox="0 0 28 28">
+          <path d="M5.5 14.5l5.2 5.1L22.5 8.4"/>
+        </svg>
+        <span class="bin-delete__success-text">Deleted</span>
+      </span>
+      <span class="bin-delete__ring" aria-hidden="true"></span>
+    </button>
+  </div>
+
+<script src="delete-button.js"></script>
+<script>
+  new BinEatsDelete(document.querySelector(".bin-delete"), {
+    sound: true,
+    onDelete: async () => console.log("delete callback")
+  });
+</script>
+</body>
+</html>
